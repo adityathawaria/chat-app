@@ -21,11 +21,11 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
             const socket = io();
-            const name = prompt("Enter your name:");
+        
 
             function sendMsg(){
                 let input = document.getElementById("msg");
-                socket.emit("chat message",{name:name,text:input.value});
+                socket.emit("chat message",{text:input.value});
                 input.value="";
             }
 

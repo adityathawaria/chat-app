@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    body { font-family: sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; padding-top: 80px; }
+    .box { background: #1e293b; padding: 30px; border-radius: 12px; width: 300px; }
+    input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: none; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; margin-top: 8px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    #loginBtn { background: #2dd4bf; }
+    #signupBtn { background: #64748b; color: white; }
+    #msg { margin-top: 10px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Chat App</h2>
+    <input id="username" placeholder="username">
+    <input id="password" type="password" placeholder="password">
+    <button id="loginBtn">Log in</button>
+    <button id="signupBtn">Sign up</button>
+    <div id="msg"></div>
+  </div>
+  <script>
+    async function send(url) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("username").value,
+          password: document.getElementById("password").value
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        window.location = "/chat";
+      } else {
+        document.getElementById("msg").textContent = data.error;
+      }
+    }
+    document.getElementById("loginBtn").onclick = () => send("/login");
+    document.getElementById("signupBtn").onclick = () => send("/signup");
+  </script>
+</body>
+</html>
