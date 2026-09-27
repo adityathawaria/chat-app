@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Chat App</title>
+    <style>
+  body { margin: 0; padding-bottom: 70px; font-family: Arial, sans-serif; background: #0e1621; color: white; }
+  #messages { list-style-type: none; margin: 0; padding: 10px; }
+  #messages li { padding: 8px 12px; margin: 6px 0; background: #2b5278; border-radius: 12px; max-width: 70%; }
+  #messages li:nth-child(odd) { background: #1f3a5f; }
+  form { background: #17212b; padding: 10px; position: fixed; bottom: 0; width: 100%; display: flex; }
+  input { flex: 1; padding: 10px; border: none; border-radius: 20px; outline: none; }
+  button { background: #2b5278; color: white; border: none; padding: 10px 20px; margin-left: 8px; border-radius: 20px; cursor: pointer; }
+</style>
+    </head>
+    <body>
+        <h2>My Chat App</h2>
+        <ul id="messages"></ul>
+        <input id="msg" placeholder="Type a message..."/>
+        <button onclick ="sendMsg()">Send</button>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+            const name = prompt("Enter your name:");
+
+            function sendMsg(){
+                let input = document.getElementById("msg");
+                socket.emit("chat message",{name:name,text:input.value});
+                input.value="";
+            }
+
+            socket.on("chat message",function(data){
+                let li = document.createElement("li");
+                li.textContent=data.name+":"+data.text;
+                document.getElementById("messages").appendChild(li);
+            });
+            socket.on("history", function(messages){
+  messages.forEach(function(data){
+    const item = document.createElement("li");
+    item.textContent = data.name + ": " + data.text;
+    document.getElementById("messages").appendChild(item);
+  });
+});
+        </script>
+    </body>
+</html>
